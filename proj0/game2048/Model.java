@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author TODO: YOUR NAME HERE :zjq
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -45,7 +45,9 @@ public class Model extends Observable {
     }
 
     /** Return the current Tile at (COL, ROW), where 0 <= ROW < size(),
-     *  0 <= COL < size(). Returns null if there is no tile there.
+     *  0 <= COL < size().
+     *  Returns null if there is no tile there.
+     *  如果没有tile则返回空指针
      *  Used for testing. Should be deprecated and removed.
      *  */
     public Tile tile(int col, int row) {
@@ -138,6 +140,12 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        for(int col=0;col< b.size();col+=1){
+            for(int row=0;row<b.size();row+=1){
+                if(b.tile(col,row)==null )
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -148,6 +156,12 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        for(int col=0;col< b.size();col+=1){
+            for(int row=0;row<b.size();row+=1){
+                if(b.tile(col,row)!=null && b.tile(col,row).value() == MAX_PIECE )
+                    return true;
+            }
+        }
         return false;
     }
 

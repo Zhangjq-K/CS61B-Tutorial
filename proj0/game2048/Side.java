@@ -21,7 +21,11 @@ public enum Side {
      *  standard coordinates, one can arrange to use exactly the same code
      *  to compute the result of tilting the board in any particular
      *  direction. */
-
+    /*
+    （COL0*s， ROW0*s） 是重新定向板左下角的标准坐标（其中 s 是板大小），
+    如果 （c， r） 是重新定向板上某个正方形的标准坐标，
+    则 （c+DCOL， r+DROW） 是重新定向板上紧靠其上方的正方形的标准坐标。
+    */
     NORTH(0, 0, 0, 1), EAST(0, 1, 1, 0), SOUTH(1, 1, 0, -1),
     WEST(1, 0, -1, 0);
 
