@@ -111,11 +111,56 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
-
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        board.startViewingFrom(side);
+        //board.setViewingPerspective(side);
+        int size = this.board.size();
+        for(int col =0; col < size ; col++){
+            //靠近side的tile先合并
+            for(int row = size-1 ; row >= 0 ;row--){
+                Tile t = board.tile(col,row);
+                if(t != null){
+                    int pos = 3;
+                    //将空白tile往opposite移动
+                    while( pos>=row ){
+                        if(board.tile(col,pos)==null)
+                            break;//如果
+                        pos--;
+                    }
+                    if(pos >= row){
+                        board.move(col, pos ,t);
+                        changed=true;
+                    }
+                }
+            }
 
+            for(int row=3;row>=0;row--){
+                Tile curTile = board.tile(col,row);
+                int nextLine = row -1;
+                if(nextLine<0)
+                    break;
+                Tile nextTile =board.tile(col,nextLine);
+                if(nextTile==null || curTile==null)
+                    break;
+                if(curTile.value()==nextTile.value()){
+                    board.move(col,row,nextTile);
+                    score += nextTile.value()*2;
+                }
+                for(int i= nextLine-1 ;i>=0 ;i--){
+                    Tile t2 = board.tile(col,i);
+                    if(t2 == null)
+                        break;
+                    if(i<size){
+                        board.move(col,i+1,t2);
+                    }
+
+
+                }
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);
         checkGameOver();
         if (changed) {
             setChanged();
@@ -173,6 +218,32 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        //判断是否为空，为空则能够继续易移动
+        if(emptySpaceExists(b)){
+            return true;
+        }
+
+        int[] ax = {0 ,-1 ,0 ,1 };
+        int[] ay = {-1 ,0 ,1 ,0 };
+        int size=b.size();
+
+        for(int col=0; col<size; col+=1) {
+            for (int row = 0; row < size; row += 1) {
+                int curTilevalue = b.tile(col, row).value();
+                //判断是否与相邻四个方向的tile相等,南西北东
+                for (int i = 0; i < 4; i++) {
+                    int col2 = col + ax[i];
+                    int row2 = row + ay[i];
+                    if(col2>=0 && col2<size && row2>=0 && row2<size){
+                        if (curTilevalue == b.tile(col2,row2).value()) {
+                            return true;
+                        }
+                    }
+
+                }
+            }
+        }
+
         return false;
     }
 
